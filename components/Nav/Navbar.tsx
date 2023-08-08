@@ -7,7 +7,7 @@ function Navbar() {
   const { userId } = auth();
 
   return (
-    <nav className="w-full flex items-center py-2 px-6 justify-between border-b shadow-sm bg-white fixed">
+    <nav className="w-full flex items-center py-2 px-6 justify-between border-b shadow-sm bg-white">
       <Link
         href="/"
         className="text-xl text-primary  font-bold uppercase tracking-wider"

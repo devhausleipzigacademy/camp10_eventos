@@ -17,7 +17,7 @@ function NavLink({ children, href }: NavLinkProps) {
       href={href}
       className={cn(
         "hover:text-primary",
-        pathName === href ? "text-neutral-700" : "text-neutral-500"
+        pathName.startsWith(href) ? "text-neutral-700" : "text-neutral-500"
       )}
     >
       {children}

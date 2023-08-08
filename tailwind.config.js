@@ -17,11 +17,15 @@ module.exports = {
     },
     colors: {
       primary: {
+        dark: "#059669",
         DEFAULT: "#6ee7b7",
       },
       neutral: {
         700: "#404040",
         500: "#737373",
+      },
+      red: {
+        500: "#ef4444",
       },
       white: "#fff",
     },
