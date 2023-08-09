@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Room, RoomSchema } from "@/schema/room";
+import axios from "axios";
 
 function CreateForm() {
   const {
@@ -27,8 +28,9 @@ function CreateForm() {
   };
   const [formState, setFormState] = useState(initialFormState); */
 
-  function onSubmitHandler() {
-    console.log(formState);
+  async function onSubmitHandler(room: Room) {
+    const res = await axios.post("/api/rooms", room);
+    console.log(res);
     /*     formState.name.length < 3 && alert("Name must be at least 3 characters");
     formState.name.length > 20 && alert("Name must be at most 20 characters"); */
   }
