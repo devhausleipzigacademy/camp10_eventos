@@ -7,15 +7,34 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Room, RoomSchema } from "@/schema/room";
 import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 function CreateForm() {
+  const router = useRouter();
+
   const {
     register: registerForm,
     handleSubmit,
     formState,
+    reset,
   } = useForm<Room>({
     resolver: zodResolver(RoomSchema),
     mode: "onBlur",
+  });
+
+  const { mutateAsync, isLoading } = useMutation({
+    mutationFn: async (room: Room) => await axios.post("/api/rooms", room),
+    onSuccess: (res) => {
+      toast.success("Room created successfully");
+      reset();
+      router.push("/booking-rooms");
+    },
+    onError: (err) => {
+      console.log("errror");
+      toast.error("Room creation failed, try again");
+    },
   });
 
   // Comment out two way data binding because react hook forms manage that for us
@@ -29,8 +48,8 @@ function CreateForm() {
   const [formState, setFormState] = useState(initialFormState); */
 
   async function onSubmitHandler(room: Room) {
-    const res = await axios.post("/api/rooms", room);
-    console.log(res);
+    mutateAsync(room);
+
     /*     formState.name.length < 3 && alert("Name must be at least 3 characters");
     formState.name.length > 20 && alert("Name must be at most 20 characters"); */
   }
@@ -97,7 +116,9 @@ function CreateForm() {
           } */
         />
       </div>
-      <Button type="submit">Create Room</Button>
+      <Button disabled={isLoading} type="submit">
+        Create Room
+      </Button>
     </form>
   );
 }
