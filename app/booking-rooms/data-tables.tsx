@@ -15,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -25,8 +27,15 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const { data: roomsData } = useQuery({
+    queryKey: ["rooms"],
+    queryFn: () => axios.get("/api/rooms").then((res) => res.data),
+    initialData: data,
+    refetchInterval: 10000,
+  });
+
   const table = useReactTable({
-    data,
+    data: roomsData,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });

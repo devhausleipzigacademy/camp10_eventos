@@ -6,13 +6,14 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Room, RoomSchema } from "@/schema/room";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 function CreateForm() {
   const router = useRouter();
-
+  const queryClient = useQueryClient();
   const {
     register: registerForm,
     handleSubmit,
@@ -25,7 +26,8 @@ function CreateForm() {
 
   const { mutateAsync, isLoading } = useMutation({
     mutationFn: async (room: Room) => await axios.post("/api/rooms", room),
-    onSuccess: (res) => {
+    onSuccess: async (res) => {
+      await queryClient.invalidateQueries(["rooms"]);
       toast.success("Room created successfully");
       reset();
       router.push("/booking-rooms");

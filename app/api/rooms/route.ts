@@ -14,3 +14,17 @@ export const POST = withValidation(RoomSchema, async ({ body }) => {
 
   return NextResponse.json(createdRoom, { status: 201 });
 });
+
+export const GET = async () => {
+  const rooms = await prisma.room.findMany({
+    select: {
+      id: true,
+      name: true,
+      postal: true,
+      city: true,
+      street: true,
+    },
+  });
+
+  return NextResponse.json(rooms);
+};
